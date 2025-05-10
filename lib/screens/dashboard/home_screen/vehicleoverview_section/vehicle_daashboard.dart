@@ -1,6 +1,6 @@
-import 'package:fleetwise_app/screens/dashboard/dashboard_screen/widgets/overview_filtertabs.dart';
-import 'package:fleetwise_app/screens/dashboard/dashboard_screen/widgets/vehicle_detailscard.dart';
-import 'package:fleetwise_app/screens/dashboard/dashboard_screen/widgets/vehicleoverview_header.dart';
+import 'package:fleetwise_app/screens/dashboard/home_screen/vehicleoverview_section/overview_filtertabs.dart';
+import 'package:fleetwise_app/screens/dashboard/home_screen/vehicleoverview_section/vehicle_detailscard.dart';
+import 'package:fleetwise_app/screens/dashboard/home_screen/vehicleoverview_section/header_section.dart';
 import 'package:fleetwise_app/utils/color.dart';
 import 'package:flutter/material.dart';
 

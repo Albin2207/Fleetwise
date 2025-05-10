@@ -1,7 +1,7 @@
+// File: lib/screens/dashboard/dashboard_screen/widgets/profitnloss_section.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fleetwise_app/provider/dashboard_provider.dart';
-
 
 class ProfitLossSection extends StatelessWidget {
   const ProfitLossSection({super.key});
@@ -9,7 +9,27 @@ class ProfitLossSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DashboardProvider>(context);
-    final data = _getDataForTab(provider.selectedTab);
+    final data = provider.currentData;
+    final selectedTab = provider.selectedTab;
+    
+    // Choose text for different tabs
+    String dateText;
+    String additionalText;
+    
+    switch (selectedTab) {
+      case TabSelection.yesterday:
+        dateText = data.date;
+        additionalText = 'predicted: ₹${data.predictedProfitLoss}';
+        break;
+      case TabSelection.today:
+        dateText = data.date;
+        additionalText = 'approx.';
+        break;
+      case TabSelection.monthly:
+        dateText = 'February (ongoing)';
+        additionalText = '';
+        break;
+    }
     
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -24,7 +44,7 @@ class ProfitLossSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                data.date,
+                dateText,
                 style: const TextStyle(color: Colors.white, fontSize: 14),
               ),
               Row(
@@ -37,15 +57,10 @@ class ProfitLossSection extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (data.predictedProfitLoss != null)
+                  if (additionalText.isNotEmpty)
                     Text(
-                      ' predicted: ₹${data.predictedProfitLoss}',
+                      ' $additionalText',
                       style: const TextStyle(color: Colors.white70, fontSize: 12),
-                    ),
-                  if (provider.selectedTab == TabSelection.monthly)
-                    const Text(
-                      ' approx.',
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                 ],
               ),
@@ -54,16 +69,5 @@ class ProfitLossSection extends StatelessWidget {
         ],
       ),
     );
-  }
-  
-  DashboardData _getDataForTab(TabSelection tab) {
-    switch (tab) {
-      case TabSelection.yesterday:
-        return DashboardData.yesterdayData;
-      case TabSelection.today:
-        return DashboardData.todayData;
-      case TabSelection.monthly:
-        return DashboardData.monthlyData;
-    }
   }
 }

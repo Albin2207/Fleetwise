@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:fleetwise_app/provider/auth_provider.dart';
-import 'package:fleetwise_app/screens/dashboard/dashboard_screen/dashboardscreen.dart';
+import 'package:fleetwise_app/screens/dashboard/home_screen/dashboardscreen.dart';
 import 'package:fleetwise_app/utils/color.dart';
 import 'package:fleetwise_app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';

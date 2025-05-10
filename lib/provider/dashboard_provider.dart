@@ -1,34 +1,26 @@
-import 'package:flutter/material.dart';
+// File: lib/provider/dashboard_provider.dart
+import 'package:flutter/foundation.dart';
 
-// Dashboard State Provider
-class DashboardProvider extends ChangeNotifier {
-  TabSelection _selectedTab = TabSelection.today;
-  
-  TabSelection get selectedTab => _selectedTab;
-  
-  void setSelectedTab(TabSelection tab) {
-    _selectedTab = tab;
-    notifyListeners();
-  }
+enum TabSelection {
+  yesterday,
+  today,
+  monthly,
 }
 
-// Tab Selection Enum
-enum TabSelection { yesterday, today, monthly }
-
-// Dashboard Data Models
 class DashboardData {
-  final int profitLoss;
-  final int? predictedProfitLoss;
-  final int earnings;
-  final int? predictedEarnings;
-  final int variableCost;
-  final int? predictedVariableCost;
+  final String date;
+  final String profitLoss;
+  final String? predictedProfitLoss;
+  final String earnings;
+  final String? predictedEarnings;
+  final String variableCost;
+  final String? predictedVariableCost;
   final int tripsCompleted;
   final int vehiclesOnRoad;
   final int totalDistance;
-  final String date;
 
   DashboardData({
+    required this.date,
     required this.profitLoss,
     this.predictedProfitLoss,
     required this.earnings,
@@ -38,46 +30,61 @@ class DashboardData {
     required this.tripsCompleted,
     required this.vehiclesOnRoad,
     required this.totalDistance,
-    required this.date,
   });
 
-  // Sample data for different tabs
-  static DashboardData get todayData => DashboardData(
-    profitLoss: 1274,
-    predictedProfitLoss: 1523,
-    earnings: 1523,
-    predictedEarnings: 1200,
-    variableCost: 249,
-    predictedVariableCost: 120,
-    tripsCompleted: 0,
-    vehiclesOnRoad: 1, // 0/1 in the screenshot
-    totalDistance: 0,
-    date: 'Sat, 8 Mar',
-  );
-  
+  // Sample data for each tab
   static DashboardData get yesterdayData => DashboardData(
-    profitLoss: 1274,
-    predictedProfitLoss: 1523,
-    earnings: 1523,
-    predictedEarnings: 1200,
-    variableCost: 249,
-    predictedVariableCost: 120,
-    tripsCompleted: 0,
-    vehiclesOnRoad: 24,
-    totalDistance: 0,
-    date: 'Fri, 7 Mar',
-  );
-  
+        date: 'Fri, 7 Mar',
+        profitLoss: '1,274',
+        predictedProfitLoss: '1,523',
+        earnings: '1,523',
+        predictedEarnings: '1,200',
+        variableCost: '249',
+        predictedVariableCost: '120',
+        tripsCompleted: 0,
+        vehiclesOnRoad: 24,
+        totalDistance: 0,
+      );
+
+  static DashboardData get todayData => DashboardData(
+        date: 'Sat, 8 Mar',
+        profitLoss: '1,274',
+        earnings: '1,523',
+        variableCost: '249',
+        tripsCompleted: 0,
+        vehiclesOnRoad: 0,
+        totalDistance: 0,
+      );
+
   static DashboardData get monthlyData => DashboardData(
-    profitLoss: 1332,
-    predictedProfitLoss: null,
-    earnings: 49,
-    predictedEarnings: null,
-    variableCost: 249,
-    predictedVariableCost: null,
-    tripsCompleted: 0, // This field is not shown in monthly view
-    vehiclesOnRoad: 0, // Not shown in the same way
-    totalDistance: 172,
-    date: 'February (ongoing)',
-  );
+        date: 'February',
+        profitLoss: '1,332',
+        earnings: '49',
+        variableCost: '249',
+        tripsCompleted: 0,
+        vehiclesOnRoad: 34,
+        totalDistance: 172,
+      );
+}
+
+class DashboardProvider with ChangeNotifier {
+  TabSelection _selectedTab = TabSelection.yesterday;
+
+  TabSelection get selectedTab => _selectedTab;
+
+  void setSelectedTab(TabSelection tab) {
+    _selectedTab = tab;
+    notifyListeners();
+  }
+  
+  DashboardData get currentData {
+    switch (_selectedTab) {
+      case TabSelection.yesterday:
+        return DashboardData.yesterdayData;
+      case TabSelection.today:
+        return DashboardData.todayData;
+      case TabSelection.monthly:
+        return DashboardData.monthlyData;
+    }
+  }
 }
