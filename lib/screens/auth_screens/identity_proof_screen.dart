@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 class IdentityProofScreen extends StatefulWidget {
-  const IdentityProofScreen({Key? key}) : super(key: key);
+  const IdentityProofScreen({super.key});
 
   @override
   State<IdentityProofScreen> createState() => _IdentityProofScreenState();
@@ -253,7 +253,7 @@ class _IdentityProofScreenState extends State<IdentityProofScreen> {
 
 // Common UI components
 class StatusBarUI extends StatelessWidget {
-  const StatusBarUI({Key? key}) : super(key: key);
+  const StatusBarUI({super.key});
 
   @override
   Widget build(BuildContext context) {

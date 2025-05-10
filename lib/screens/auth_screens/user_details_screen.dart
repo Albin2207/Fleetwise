@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UserNameScreen extends StatefulWidget {
-  const UserNameScreen({Key? key}) : super(key: key);
+  const UserNameScreen({super.key});
 
   @override
   State<UserNameScreen> createState() => _UserNameScreenState();

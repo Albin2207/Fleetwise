@@ -19,7 +19,7 @@ class AppTextField extends StatelessWidget {
   final VoidCallback? onTap;
   
   const AppTextField({
-    Key? key,
+    super.key,
     this.label,
     this.hint,
     required this.controller,
@@ -33,7 +33,7 @@ class AppTextField extends StatelessWidget {
     this.readOnly = false,
     this.maxLines = 1,
     this.onTap,
-  }) : super(key: key);
+  });
   
   @override
   Widget build(BuildContext context) {
