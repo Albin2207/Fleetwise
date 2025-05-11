@@ -3,14 +3,7 @@ import 'package:fleetwise_app/services/auth_service.dart';
 import 'package:fleetwise_app/services/storage_service.dart';
 import 'package:flutter/material.dart';
 
-
-enum AuthStatus {
-  initial,
-  authenticated,
-  unauthenticated,
-  loading,
-  error,
-}
+enum AuthStatus { initial, authenticated, unauthenticated, loading, error }
 
 class AuthProvider with ChangeNotifier {
   AuthStatus _status = AuthStatus.initial;
@@ -50,7 +43,7 @@ class AuthProvider with ChangeNotifier {
       _status = AuthStatus.error;
       _errorMessage = e.toString();
     }
-    
+
     notifyListeners();
   }
 
@@ -62,7 +55,9 @@ class AuthProvider with ChangeNotifier {
     try {
       // Mocking the OTP send since API doesn't work
       await Future.delayed(const Duration(seconds: 1));
-      _status = AuthStatus.unauthenticated; // Keep as unauthenticated until verification
+      _status =
+          AuthStatus
+              .unauthenticated; // Keep as unauthenticated until verification
       notifyListeners();
       return true;
     } catch (e) {
@@ -83,7 +78,7 @@ class AuthProvider with ChangeNotifier {
       // In a real app, we would set the token here after API returns it
       // _token = response.token;
       // await _storageService.saveToken(_token!);
-      
+
       // For now, just changing the status but not setting as authenticated yet
       _status = AuthStatus.unauthenticated;
       notifyListeners();
@@ -102,7 +97,26 @@ class AuthProvider with ChangeNotifier {
 
     try {
       await Future.delayed(const Duration(seconds: 1));
-      // Here we would update the user information on the server
+      // Create or update user object with the name
+      if (_user == null) {
+        _user = User(
+          id: '', // Will be set when user is fully registered
+          name: name,
+          phoneNumber: _phoneNumber ?? '',
+          documents: {},
+        );
+      } else {
+        // Update existing user object
+        _user = User(
+          id: _user!.id,
+          name: name,
+          phoneNumber: _user!.phoneNumber,
+          documents: _user!.documents,
+        );
+      }
+
+      // Here we would also update the user information on the server
+
       _status = AuthStatus.unauthenticated;
       notifyListeners();
       return true;
@@ -151,7 +165,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> logout() async {
     _status = AuthStatus.loading;
     notifyListeners();
-    
+
     try {
       await _storageService.deleteToken();
       _token = null;
@@ -161,7 +175,7 @@ class AuthProvider with ChangeNotifier {
       _status = AuthStatus.error;
       _errorMessage = e.toString();
     }
-    
+
     notifyListeners();
   }
 }

@@ -7,10 +7,14 @@ class VehiclesOverviewHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 16.0),
       child: Row(
         children: [
-          Icon(Icons.local_shipping, color: AppColors.primaryBlue, size: 24),
+          Image.asset(
+            'assets/ambulance.png', 
+            width: 24,
+            height: 24,
+          ),
           const SizedBox(width: 8),
           Text(
             'Vehicles Overview',

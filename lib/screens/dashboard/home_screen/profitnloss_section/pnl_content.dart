@@ -7,25 +7,34 @@ class DashboardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Accessing the DashboardProvider to get the selected tab
     final provider = Provider.of<DashboardProvider>(context);
     final selectedTab = provider.selectedTab;
+
+    // Fetching data based on the selected tab
     final data = _getDataForTab(selectedTab);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Showing stats based on selected tab
           if (selectedTab == TabSelection.monthly)
-            _buildMonthlyStats(data)
+            _buildMonthlyStats(data) // Monthly Stats
           else
-            _buildDailyStats(data, selectedTab),
+            _buildDailyStats(
+              data,
+              selectedTab,
+            ), // Daily Stats (Yesterday/Today)
         ],
       ),
     );
   }
 
+  // Builds the Daily Stats section with relevant data
   Widget _buildDailyStats(DashboardData data, TabSelection tab) {
+    // Defining the appropriate subtitles for each tab
     String earningSubtitle;
     String costSubtitle;
     String tripsSubtitle;
@@ -48,43 +57,50 @@ class DashboardContent extends StatelessWidget {
 
     return Column(
       children: [
+        // Earning Stat Card
         StatCard(
-          icon: Icons.currency_rupee,
-          iconColor: const Color(0xFF1EA896),
+          image: 'assets/pnl_icons/Icon.png', 
           title: 'Earning${tab == TabSelection.yesterday ? 's' : ''}',
           subtitle: earningSubtitle,
           value: '₹${data.earnings}',
-          rightSubtext: tab == TabSelection.yesterday ? 'Predicted ₹${data.predictedEarnings}' : 'Approx',
+          rightSubtext:
+              tab == TabSelection.yesterday
+                  ? 'Predicted ₹${data.predictedEarnings}'
+                  : 'Approx',
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
+        // Variable Cost Stat Card
         StatCard(
-          icon: Icons.currency_exchange,
-          iconColor: Colors.blue,
+          image: 'assets/pnl_icons/Icon2.png', 
           title: 'Variable Cost',
           subtitle: costSubtitle,
           value: '₹${data.variableCost}',
-          rightSubtext: tab == TabSelection.yesterday ? 'Predicted ₹${data.predictedVariableCost}' : 'Approx',
+          rightSubtext:
+              tab == TabSelection.yesterday
+                  ? 'Predicted ₹${data.predictedVariableCost}'
+                  : 'Approx',
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
+        // Trips Completed Stat Card
         StatCard(
-          icon: Icons.assignment_turned_in_outlined,
-          iconColor: Colors.indigo,
+          image: 'assets/images/trips.png', 
           title: 'No. of Trips Completed',
           subtitle: tripsSubtitle,
           value: '${data.tripsCompleted}',
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
+        // Vehicles on Road Stat Card
         StatCard(
-          icon: Icons.directions_bus_outlined,
-          iconColor: const Color(0xFFFFA726),
+          image: 'assets/images/vehicles.png', 
+        
           title: 'Vehicles on the Road',
           subtitle: vehiclesSubtitle,
           value: tab == TabSelection.today ? '0/1' : '${data.vehiclesOnRoad}',
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
+        // Distance Travelled Stat Card
         StatCard(
-          icon: Icons.speed,
-          iconColor: const Color(0xFFAB47BC),
+          image: 'assets/images/distance.png', 
           title: 'Total Distance Travelled',
           subtitle: distanceSubtitle,
           value: '${data.totalDistance} km',
@@ -93,28 +109,29 @@ class DashboardContent extends StatelessWidget {
     );
   }
 
+  // Builds the Monthly Stats section
   Widget _buildMonthlyStats(DashboardData data) {
     return Column(
       children: [
+        // Total Earning Stat Card
         StatCard(
-          icon: Icons.currency_rupee,
-          iconColor: const Color(0xFF1EA896),
-          title: 'Total Earning',
-          subtitle: 'Your fleet has earned',
+          image: 'assets/images/earning.png', 
+          title: 'Earning',
+          subtitle: 'Total revenue generated',
           value: '₹${data.earnings}',
         ),
         const SizedBox(height: 12),
+        // Total Cost Stat Card
         StatCard(
-          icon: Icons.currency_exchange,
-          iconColor: Colors.blue,
-          title: 'Total Cost',
-          subtitle: 'Track expenses to maximise profits',
+          image: 'assets/images/cost.png', 
+          title: 'Variable Cost',
+          subtitle: 'Expenses & maintenance',
           value: '₹${data.variableCost}',
         ),
         const SizedBox(height: 12),
+        // Profit Starting Day Stat Card (Pending data)
         StatCard(
-          icon: Icons.calendar_today,
-          iconColor: const Color(0xFFFFA726),
+          image: 'assets/images/calendar.png', 
           title: 'Profit Starting Day',
           subtitle: 'Estimated break-even date',
           value: 'PREDICTING...',
@@ -122,9 +139,9 @@ class DashboardContent extends StatelessWidget {
           valueColor: Colors.orange,
         ),
         const SizedBox(height: 12),
+        // Total Distance Driven Stat Card
         StatCard(
-          icon: Icons.speed,
-          iconColor: const Color(0xFFAB47BC),
+          image: 'assets/images/distance.png', 
           title: 'Total Distance Driven',
           subtitle: 'Distance driven by 34 vehicles',
           value: '${data.totalDistance} km',
@@ -133,6 +150,7 @@ class DashboardContent extends StatelessWidget {
     );
   }
 
+  // Returns data based on the selected tab
   DashboardData _getDataForTab(TabSelection tab) {
     switch (tab) {
       case TabSelection.yesterday:
@@ -145,9 +163,9 @@ class DashboardContent extends StatelessWidget {
   }
 }
 
+// Stateless widget to display individual stats
 class StatCard extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
+  final String image; // Image URL for the stat card
   final String title;
   final String subtitle;
   final String value;
@@ -157,8 +175,7 @@ class StatCard extends StatelessWidget {
 
   const StatCard({
     super.key,
-    required this.icon,
-    required this.iconColor,
+    required this.image,
     required this.title,
     required this.subtitle,
     required this.value,
@@ -170,12 +187,14 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 74,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.grey.withOpacity(0.15),
             spreadRadius: 2,
             blurRadius: 8,
@@ -185,27 +204,38 @@ class StatCard extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Image container with circular background
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.15),
+              color: Colors.blue.withOpacity(
+                0.15,
+              ), // Color for the image container
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: iconColor, size: 24),
+            child: Image.asset(
+              image,
+              width: 24,
+              height: 24,
+              color: Colors.black,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Title of the stat card
                 Text(
                   title,
                   style: const TextStyle(
                     fontSize: 15,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
+                // Subtitle of the stat card
                 Text(
                   subtitle,
                   style: TextStyle(fontSize: 12, color: Colors.grey[700]),
@@ -216,6 +246,7 @@ class StatCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              // Value of the stat card (could be pending)
               Text(
                 value,
                 style: TextStyle(
@@ -224,6 +255,7 @@ class StatCard extends StatelessWidget {
                   color: isValuePending ? valueColor : Colors.black,
                 ),
               ),
+              // Right subtext if provided (e.g., "Predicted" or "Approx")
               if (rightSubtext != null)
                 Text(
                   rightSubtext!,

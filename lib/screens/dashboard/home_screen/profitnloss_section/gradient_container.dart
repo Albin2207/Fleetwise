@@ -19,7 +19,7 @@ class DashboardGradientContainer extends StatelessWidget {
 
     switch (selectedTab) {
       case TabSelection.yesterday:
-        topColor = const Color.fromARGB(255, 177, 144, 136); // deep brown
+        topColor = const Color.fromARGB(255, 161, 121, 110); // deep brown
         gridLineColor = const Color.fromARGB(255, 139, 117, 108);
         break;
       case TabSelection.today:
@@ -40,10 +40,10 @@ class DashboardGradientContainer extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment(
             0,
-            -0.5,
-          ), // Move gradient end point much higher (negative value moves it up)
+            -0.8,
+          ), 
           colors: [topColor, Colors.black],
-          stops: const [0.0, 1.0],
+          stops: const [0, 1],
         ),
       ),
       child: Stack(

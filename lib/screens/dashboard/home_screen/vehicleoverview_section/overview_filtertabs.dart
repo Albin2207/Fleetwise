@@ -14,7 +14,7 @@ class StatusFilterTabs extends StatelessWidget {
     ];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children:
@@ -24,13 +24,13 @@ class StatusFilterTabs extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 1.0),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 8.0,
+                    horizontal: 12.0,
+                    vertical: 10.0,
                   ),
                   decoration: BoxDecoration(
                     color:
                         isSelected ? AppColors.primaryBlue : Colors.transparent,
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     '${tab['name']} (${tab['count'].toString().padLeft(2, '0')})',
@@ -38,7 +38,7 @@ class StatusFilterTabs extends StatelessWidget {
                       color: isSelected ? Colors.white : Colors.grey,
                       fontWeight:
                           isSelected ? FontWeight.bold : FontWeight.normal,
-                      fontSize: 14,
+                      fontSize: 12,
                     ),
                   ),
                 ),

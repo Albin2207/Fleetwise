@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:fleetwise_app/provider/auth_provider.dart';
 import 'package:fleetwise_app/screens/dashboard/home_screen/dashboardscreen.dart';
 import 'package:fleetwise_app/utils/color.dart';
-import 'package:fleetwise_app/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -75,47 +74,60 @@ class _IdentityProofScreenState extends State<IdentityProofScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Skip button logic
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const DashboardScreen()),
-              );
-            },
-            child: const Text(
-              'Skip',
-              style: TextStyle(color: AppColors.textSecondary),
-            ),
-          ),
-        ],
-      ),
+      backgroundColor: const Color.fromARGB(255, 225, 225, 226),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Status bar area (just for UI)
-              const StatusBarUI(),
-              const SizedBox(height: 24),
+              // Progress Indicator Bar
+              Container(
+                width: 120,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 16),
 
-              // Title
-              const Text(
-                'Identity & Address proof of owner',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              // Title with Skip Button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Identity & Address proof of owner',
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1F3351),
+                    ),
+                  ),
+                  // Skip Button
+                  TextButton(
+                    onPressed: () {
+                      // Navigate to Dashboard or handle skip logic
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const DashboardScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Skip',
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
-              
-              // Instructions
-              const Text(
-                'Ramen Ji, get started with document upload',
-                style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+
+              // Instructions - Using user name from AuthProvider
+              Text(
+                '${authProvider.user?.name ?? ''}, get started with document upload!',
+                style: const TextStyle(fontSize: 14, color: Color(0xFF5A6C8A)),
               ),
               const SizedBox(height: 24),
 
@@ -146,37 +158,10 @@ class _IdentityProofScreenState extends State<IdentityProofScreen> {
 
               const Spacer(),
 
-              // Submit Button
-              AppButton(
-                text: 'SUBMIT',
-                isLoading: authProvider.status == AuthStatus.loading,
-                onPressed: () async {
-                  if (_panCardImage != null &&
-                      _aadhaarFrontImage != null &&
-                      _aadhaarBackImage != null) {
-                    // Upload documents
-                    final success = await authProvider.uploadDocuments(
-                      panCard: _panCardImage!.path,
-                      aadharFront: _aadhaarFrontImage!.path,
-                      aadharBack: _aadhaarBackImage!.path,
-                    );
-                    
-                    if (success && mounted) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => const DashboardScreen()),
-                      );
-                    }
-                  } else {
-                    // Show error message
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please upload all required documents'),
-                      ),
-                    );
-                  }
-                },
-              ),
+              // Custom Submit Button
+              _buildCustomSubmitButton(authProvider),
+
+              // Remove bottom progress bar
             ],
           ),
         ),
@@ -193,89 +178,122 @@ class _IdentityProofScreenState extends State<IdentityProofScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title, 
-          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary)
+          title,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Color(0xFF5A6C8A),
+            fontWeight: FontWeight.w500,
+          ),
         ),
         const SizedBox(height: 8),
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            height: 48,
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.divider),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: Text(
-                      image != null ? 'Document uploaded' : 'Upload',
-                      style: TextStyle(
-                        color: image != null ? Colors.green : Colors.grey[600],
-                      ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 2,
+                offset: const Offset(0, 1),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              // Left part - status indicator
+              Expanded(
+                child: Container(
+                  height: 56,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    image != null
+                        ? 'Document uploaded'
+                        : 'Tap to select document',
+                    style: TextStyle(
+                      color: image != null ? Colors.green : Colors.grey[600],
                     ),
                   ),
                 ),
-                Container(
+              ),
+              // Upload button part
+              GestureDetector(
+                onTap: onTap,
+                child: Container(
+                  height: 56,
                   width: 100,
-                  height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: Colors.white,
                     borderRadius: const BorderRadius.horizontal(
                       right: Radius.circular(8),
                     ),
+                    border: Border.all(color: Colors.grey[200]!, width: 1),
                   ),
-                  child: Center(
-                    child: image != null
-                        ? const Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                          )
-                        : const Text(
-                            'Upload',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Upload',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
-}
 
-// Common UI components
-class StatusBarUI extends StatelessWidget {
-  const StatusBarUI({super.key});
+  Widget _buildCustomSubmitButton(AuthProvider authProvider) {
+    return InkWell(
+      onTap: () async {
+        if (_panCardImage != null &&
+            _aadhaarFrontImage != null &&
+            _aadhaarBackImage != null) {
+          // Upload documents
+          final success = await authProvider.uploadDocuments(
+            panCard: _panCardImage!.path,
+            aadharFront: _aadhaarFrontImage!.path,
+            aadharBack: _aadhaarBackImage!.path,
+          );
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text(
-          '9:27',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          if (success && mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const DashboardScreen()),
+            );
+          }
+        } else {
+          // Show error message
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Please upload all required documents'),
+            ),
+          );
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1F3351), // Dark blue color from your image
+          borderRadius: BorderRadius.circular(8),
         ),
-        Row(
-          children: const [
-            Icon(Icons.signal_cellular_4_bar, size: 16),
-            SizedBox(width: 4),
-            Icon(Icons.wifi, size: 16),
-            SizedBox(width: 4),
-            Icon(Icons.battery_full, size: 16),
-          ],
-        ),
-      ],
+        alignment: Alignment.center,
+        child:
+            authProvider.status == AuthStatus.loading
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text(
+                  'SUBMIT',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+      ),
     );
   }
 }
-
-

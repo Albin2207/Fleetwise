@@ -6,7 +6,7 @@ class BottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 64,
+      height: 75,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -20,35 +20,30 @@ class BottomNavigation extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildNavItem(Icons.home, 'Home', true),
-          _buildNavItem(Icons.directions_car, 'Vehicles', false),
-          _buildNavItem(Icons.person, 'Drivers', false),
-          _buildNavItem(Icons.account_circle, 'Account', false),
-        ],
+        children: [_buildNavIcon(0)],
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isSelected) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          icon,
-          color: isSelected ? Colors.black : Colors.grey,
-          size: 24,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: isSelected ? Colors.black : Colors.grey,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+  Widget _buildNavIcon(int index) {
+    return Expanded(
+      child: InkWell(
+        onTap: () {
+          // Handle navigation tap
+        },
+        child: SizedBox(
+          child: ClipRect(
+            child: Align(
+              alignment: Alignment(0, 0),
+              child: Image.asset(
+                'assets/Navbar MFO.png',
+                fit: BoxFit.cover,
+                width: 400,
+              ),
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

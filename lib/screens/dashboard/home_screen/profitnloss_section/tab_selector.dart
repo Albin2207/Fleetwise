@@ -11,7 +11,7 @@ class TabSelector extends StatelessWidget {
     final provider = Provider.of<DashboardProvider>(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 1.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -21,14 +21,14 @@ class TabSelector extends StatelessWidget {
             TabSelection.yesterday,
             provider.selectedTab == TabSelection.yesterday,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 29),
           _buildTabButton(
             context,
             'Today',
             TabSelection.today,
             provider.selectedTab == TabSelection.today,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 29),
           _buildTabButton(
             context,
             'Monthly',
@@ -60,6 +60,7 @@ class TabSelector extends StatelessWidget {
           label,
           style: TextStyle(
             color: isSelected ? Colors.black : Colors.white,
+            
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),

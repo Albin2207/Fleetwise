@@ -15,7 +15,6 @@ class VehicleDashboardScreen extends StatefulWidget {
 class _VehicleDashboardScreenState extends State<VehicleDashboardScreen> {
   String selectedTab = 'All';
 
-  // This would typically come from your API/database
   final List<Map<String, dynamic>> vehiclesData = [
     {
       'vehicleNumber': 'UP 12 AK 3532',
@@ -63,17 +62,16 @@ class _VehicleDashboardScreenState extends State<VehicleDashboardScreen> {
     return Scaffold(
       backgroundColor: AppColors.lightGray,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const VehiclesOverviewHeader(),
-            StatusFilterTabs(),
-            const SizedBox(height: 8),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredVehicles.length,
-                itemBuilder: (context, index) {
-                  final vehicle = filteredVehicles[index];
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const VehiclesOverviewHeader(),
+                StatusFilterTabs(),
+                const SizedBox(height: 8),
+                ...filteredVehicles.map((vehicle) {
                   return VehicleCard(
                     vehicleNumber: vehicle['vehicleNumber'],
                     status: vehicle['status'],
@@ -85,10 +83,10 @@ class _VehicleDashboardScreenState extends State<VehicleDashboardScreen> {
                     sosTime: vehicle['sosTime'],
                     hasDriver: vehicle['hasDriver'] ?? true,
                   );
-                },
-              ),
+                }),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

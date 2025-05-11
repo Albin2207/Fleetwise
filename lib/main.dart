@@ -1,6 +1,7 @@
 import 'package:fleetwise_app/provider/auth_provider.dart';
 import 'package:fleetwise_app/provider/dashboard_provider.dart';
 import 'package:fleetwise_app/provider/fleet_provider.dart';
+import 'package:fleetwise_app/screens/auth_screens/login_screen.dart';
 import 'package:fleetwise_app/screens/dashboard/home_screen/dashboardscreen.dart';
 import 'package:fleetwise_app/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
-        home: const DashboardScreen(),
+        home: const LoginScreen(),
       ),
     );
   }

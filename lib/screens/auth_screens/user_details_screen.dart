@@ -24,63 +24,89 @@ class _UserNameScreenState extends State<UserNameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
+      backgroundColor: const Color.fromARGB(255, 225, 225, 226),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Status bar area (just for UI)
-              const StatusBarUI(),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
-              // Title
-              const Text(
-                'What shall we call you?',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-
-              // Identity type text
+              // Header row with profile icon
               Row(
-                children: const [
-                  Text(
-                    'Enter full name as on your ',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.textSecondary,
-                    ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Left side - Title and subtitle
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title
+                      const Text(
+                        'What shall we call you?',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF223652),
+                        ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      // Subtitle about Aadhar Card
+                      Row(
+                        children: const [
+                          Text(
+                            'Enter full name as on your ',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          Text(
+                            'Aadhar Card',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Aadhaar Card',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.primary,
+
+                  // Profile icon on right
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.teal.shade300,
+                      shape: BoxShape.circle,
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/pnl_icons/image 3.png',
+                        width: 48,
+                        height: 48,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
-
-              // Full Name Input Field
+              const SizedBox(height: 30),
+              // Full Name Input Field using your custom widget
               AppTextField(
                 label: "Your Full Name*",
-                hint: 'Enter your full name',
+                hint: '',
                 controller: _fullNameController,
               ),
 
               const Spacer(),
 
-              // Submit Button
+              // Submit Button using your global AppButton
               Consumer<AuthProvider>(
                 builder: (context, authProvider, _) {
                   return AppButton(
@@ -90,9 +116,9 @@ class _UserNameScreenState extends State<UserNameScreen> {
                       final name = _fullNameController.text.trim();
                       if (name.isNotEmpty) {
                         final success = await authProvider.setUserName(name);
-
                         if (success && mounted) {
                           Navigator.push(
+                            // ignore: use_build_context_synchronously
                             context,
                             MaterialPageRoute(
                               builder: (_) => const IdentityProofScreen(),
@@ -104,8 +130,6 @@ class _UserNameScreenState extends State<UserNameScreen> {
                   );
                 },
               ),
-
-              // Keyboard UI (visual only)
               const SizedBox(height: 16),
             ],
           ),
