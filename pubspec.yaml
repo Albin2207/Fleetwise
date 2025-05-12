@@ -68,13 +68,18 @@ flutter:
     - assets/ambulance.png
     - assets/Navbar MFO.png
     - assets/bottom_navigation/Driver.png
-    - assets/pnl_icons/Icon.png
     - assets/pnl_icons/Icon2.png
     - assets/Untitled design 2.png
     - assets/Company Name.png
     - assets/Vector (4).png
     - assets/pnl_icons/image 4.png
     - assets/pnl_icons/image 3.png
+    - assets/pnl_icons/Icon.png
+    - assets/pnl_icons/Icon3.png
+    - assets/pnl_icons/Icon4.png
+    - assets/pnl_icons/Icon5.png
+    - assets/Graph.png
+    - assets/FleetWise.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

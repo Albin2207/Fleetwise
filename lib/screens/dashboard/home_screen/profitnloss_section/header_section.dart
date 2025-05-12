@@ -10,7 +10,7 @@ class DashboardHeader extends StatelessWidget {
     // Get the auth provider to access user's name
     final authProvider = Provider.of<AuthProvider>(context);
     final userName = authProvider.user?.name ?? 'User';
-    
+
     return Padding(
       padding: const EdgeInsets.only(
         left: 16.0,
@@ -20,15 +20,12 @@ class DashboardHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          
           Container(
             width: 60,
             height: 60,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                  'assets/Avaronn.png',
-                ), 
+                image: AssetImage('assets/Avaronn.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -43,7 +40,7 @@ class DashboardHeader extends StatelessWidget {
                 style: TextStyle(color: Colors.white70, fontSize: 14),
               ),
               Text(
-                userName, 
+                userName,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,

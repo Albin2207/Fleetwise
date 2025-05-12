@@ -5,7 +5,7 @@ class AuthService {
   Future<User> getUserInfo(String token) async {
     // In a real app, this would call the API
     await Future.delayed(const Duration(seconds: 1));
-    
+
     // Return mock user
     return User(
       id: '1',

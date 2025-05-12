@@ -253,7 +253,10 @@ class VehicleCard extends StatelessWidget {
                     const SizedBox(width: 16),
                     Text(
                       '₹${_formatCurrency(cost)}',
-                      style: const TextStyle(color: Color.fromARGB(255, 112, 109, 109), fontSize: 14),
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 112, 109, 109),
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -295,7 +298,6 @@ class VehicleCard extends StatelessWidget {
                                           padding: const EdgeInsets.only(
                                             left: 8.0,
                                           ),
-                                          
                                         ),
                                       ),
                                     ),
@@ -316,7 +318,10 @@ class VehicleCard extends StatelessWidget {
                     const SizedBox(width: 16),
                     Text(
                       '₹${_formatCurrency(earnings)}',
-                      style: const TextStyle(color: Color.fromARGB(255, 112, 109, 109), fontSize: 14),
+                      style: const TextStyle(
+                        color: Color.fromARGB(255, 112, 109, 109),
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),

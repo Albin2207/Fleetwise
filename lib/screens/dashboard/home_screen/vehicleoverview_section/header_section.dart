@@ -10,11 +10,7 @@ class VehiclesOverviewHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 16.0),
       child: Row(
         children: [
-          Image.asset(
-            'assets/ambulance.png', 
-            width: 24,
-            height: 24,
-          ),
+          Image.asset('assets/ambulance.png', width: 24, height: 24),
           const SizedBox(width: 8),
           Text(
             'Vehicles Overview',

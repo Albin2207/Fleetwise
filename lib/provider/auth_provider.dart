@@ -1,4 +1,5 @@
 import 'package:fleetwise_app/models/user_model.dart';
+import 'package:fleetwise_app/screens/dashboard/home_screen/dashboardscreen.dart';
 import 'package:fleetwise_app/services/auth_service.dart';
 import 'package:fleetwise_app/services/storage_service.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,9 @@ class AuthProvider with ChangeNotifier {
   User? _user;
   String? _phoneNumber;
   String? _errorMessage;
-
+  bool _isInitialized = false;
   // Mock auth service for now
+
   final AuthService _authService = AuthService();
   final StorageService _storageService = StorageService();
 
@@ -21,6 +23,7 @@ class AuthProvider with ChangeNotifier {
   User? get user => _user;
   String? get phoneNumber => _phoneNumber;
   String? get errorMessage => _errorMessage;
+  bool get isInitialized => _isInitialized; // Getter for initialized state
 
   AuthProvider() {
     _initializeAuth();
@@ -44,6 +47,7 @@ class AuthProvider with ChangeNotifier {
       _errorMessage = e.toString();
     }
 
+    _isInitialized = true; // Mark as initialized
     notifyListeners();
   }
 
@@ -132,13 +136,13 @@ class AuthProvider with ChangeNotifier {
     required String panCard,
     required String aadharFront,
     required String aadharBack,
+    required BuildContext context, // Add this parameter
   }) async {
     _status = AuthStatus.loading;
     notifyListeners();
 
     try {
       await Future.delayed(const Duration(seconds: 1));
-      // Mock successful authentication after documents upload
       _token = 'mock_jwt_token';
       await _storageService.saveToken(_token!);
       _user = User(
@@ -153,6 +157,13 @@ class AuthProvider with ChangeNotifier {
       );
       _status = AuthStatus.authenticated;
       notifyListeners();
+
+      // Now you can safely access context to navigate
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const DashboardScreen()),
+        (route) => false,
+      );
       return true;
     } catch (e) {
       _status = AuthStatus.error;
@@ -160,22 +171,5 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
       return false;
     }
-  }
-
-  Future<void> logout() async {
-    _status = AuthStatus.loading;
-    notifyListeners();
-
-    try {
-      await _storageService.deleteToken();
-      _token = null;
-      _user = null;
-      _status = AuthStatus.unauthenticated;
-    } catch (e) {
-      _status = AuthStatus.error;
-      _errorMessage = e.toString();
-    }
-
-    notifyListeners();
   }
 }

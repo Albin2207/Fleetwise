@@ -55,9 +55,7 @@ class DashboardView extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   color: const Color(0xFFF5F5F5),
-                  height:
-                      MediaQuery.of(context).size.height *
-                      0.6, 
+                  height: MediaQuery.of(context).size.height * 0.6,
                   child: const VehicleDashboardScreen(),
                 ),
               ),

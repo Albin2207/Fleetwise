@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:fleetwise_app/provider/fleet_provider.dart';
 
 class ProfitTracker extends StatelessWidget {
   const ProfitTracker({super.key});
@@ -18,64 +16,11 @@ class ProfitTracker extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
-            'Track Your Profit & Loss in',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const Text(
-            'Real-Time!',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
           Stack(
             alignment: Alignment.center,
             children: [
-              Image.asset(
-                'assets/images/phone_mockup.png',
-                width: 220,
-              ),
-              Positioned(
-                top: 70,
-                child: Consumer<FleetProvider>(
-                  builder: (context, fleetProvider, _) {
-                    return Text(
-                      '₹${fleetProvider.profit.toStringAsFixed(0)}',
-                      style: const TextStyle(
-                        color: Colors.green,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  },
-                ),
-              ),
+              Image.asset('assets/Graph.png', height: 300, width: 600),
             ],
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'See your profit and loss grow',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const Text(
-            'as your vehicle runs!',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-            ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

@@ -1,8 +1,10 @@
+import 'package:fleetwise_app/screens/auth_screens/otp_screen/widgets/header_section.dart';
+import 'package:fleetwise_app/screens/auth_screens/otp_screen/widgets/otp_input_field.dart';
+import 'package:fleetwise_app/screens/auth_screens/otp_screen/widgets/resend_timer.dart';
+import 'package:fleetwise_app/screens/auth_screens/userdetails_screen/user_details_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:fleetwise_app/provider/auth_provider.dart';
-import 'package:fleetwise_app/screens/auth_screens/user_details_screen.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   const OtpVerificationScreen({super.key});
@@ -129,52 +131,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top section with title and rating
-              Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Verify Number',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-      ],
-    ),
-
-    // Right side: Image
-    Padding(
-      padding: const EdgeInsets.only(top: 8.0), 
-      child: Image.asset(
-        'assets/pnl_icons/image 4.png',
-        width: 40,
-        height: 40,
-      ),
-    ),
-  ],
-),
-Row(
-  children: [
-    const Text(
-      'OTP sent to ',
-      style: TextStyle(fontSize: 14, color: Colors.black54),
-    ),
-    Text(
-      phoneNumber,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: Colors.black87,
-      ),
-    ),
-  ],
-),
+              // Header with title and phone number
+              OtpHeader(phoneNumber: phoneNumber),
 
               const SizedBox(height: 40),
 
@@ -184,65 +142,16 @@ Row(
                 style: TextStyle(fontSize: 14, color: Colors.black54),
               ),
               const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(
-                  6,
-                  (index) => SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: TextField(
-                      controller: _otpControllers[index],
-                      focusNode: _focusNodes[index],
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      maxLength: 1,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      decoration: InputDecoration(
-                        counterText: '',
-                        hintText: '*',
-                        hintStyle: const TextStyle(
-                          color: Colors.black26,
-                          fontSize: 20,
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.black12,
-                            width: 1,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.black12,
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onChanged: (value) => _onOtpDigitChanged(index, value),
-                    ),
-                  ),
-                ),
+
+              // OTP Input Field
+              OtpInputField(
+                controllers: _otpControllers,
+                focusNodes: _focusNodes,
+                onDigitChanged: _onOtpDigitChanged,
               ),
 
               // Resend timer
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: Text(
-                    "Resend in 00:${_resendSeconds.toString().padLeft(2, '0')}",
-                    style: const TextStyle(fontSize: 12, color: Colors.black54),
-                  ),
-                ),
-              ),
+              ResendTimer(seconds: _resendSeconds),
 
               // Loading indicator when verifying
               if (_isVerifying)
@@ -270,27 +179,36 @@ Row(
               const SizedBox(height: 30),
 
               // Link to change mobile number
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: const Text(
-                    "change your mobile number",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                ),
-              ),
+              ChangeMobileNumberLink(),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ChangeMobileNumberLink extends StatelessWidget {
+  const ChangeMobileNumberLink({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: Size.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
+        child: const Text(
+          "change your mobile number",
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+            decoration: TextDecoration.none,
           ),
         ),
       ),

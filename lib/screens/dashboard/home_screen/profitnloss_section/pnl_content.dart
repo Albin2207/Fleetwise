@@ -59,7 +59,7 @@ class DashboardContent extends StatelessWidget {
       children: [
         // Earning Stat Card
         StatCard(
-          image: 'assets/pnl_icons/Icon.png', 
+          image: 'assets/pnl_icons/Icon.png',
           title: 'Earning${tab == TabSelection.yesterday ? 's' : ''}',
           subtitle: earningSubtitle,
           value: '₹${data.earnings}',
@@ -71,7 +71,7 @@ class DashboardContent extends StatelessWidget {
         const SizedBox(height: 10),
         // Variable Cost Stat Card
         StatCard(
-          image: 'assets/pnl_icons/Icon2.png', 
+          image: 'assets/pnl_icons/Icon2.png',
           title: 'Variable Cost',
           subtitle: costSubtitle,
           value: '₹${data.variableCost}',
@@ -83,7 +83,7 @@ class DashboardContent extends StatelessWidget {
         const SizedBox(height: 10),
         // Trips Completed Stat Card
         StatCard(
-          image: 'assets/images/trips.png', 
+          image: 'assets/pnl_icons/Icon3.png',
           title: 'No. of Trips Completed',
           subtitle: tripsSubtitle,
           value: '${data.tripsCompleted}',
@@ -91,8 +91,8 @@ class DashboardContent extends StatelessWidget {
         const SizedBox(height: 10),
         // Vehicles on Road Stat Card
         StatCard(
-          image: 'assets/images/vehicles.png', 
-        
+          image: 'assets/pnl_icons/Icon4.png',
+
           title: 'Vehicles on the Road',
           subtitle: vehiclesSubtitle,
           value: tab == TabSelection.today ? '0/1' : '${data.vehiclesOnRoad}',
@@ -100,7 +100,7 @@ class DashboardContent extends StatelessWidget {
         const SizedBox(height: 10),
         // Distance Travelled Stat Card
         StatCard(
-          image: 'assets/images/distance.png', 
+          image: 'assets/pnl_icons/Icon5.png',
           title: 'Total Distance Travelled',
           subtitle: distanceSubtitle,
           value: '${data.totalDistance} km',
@@ -115,7 +115,7 @@ class DashboardContent extends StatelessWidget {
       children: [
         // Total Earning Stat Card
         StatCard(
-          image: 'assets/images/earning.png', 
+          image: 'assets/pnl_icons/Icon.png',
           title: 'Earning',
           subtitle: 'Total revenue generated',
           value: '₹${data.earnings}',
@@ -123,7 +123,7 @@ class DashboardContent extends StatelessWidget {
         const SizedBox(height: 12),
         // Total Cost Stat Card
         StatCard(
-          image: 'assets/images/cost.png', 
+          image: 'assets/pnl_icons/Icon2.png',
           title: 'Variable Cost',
           subtitle: 'Expenses & maintenance',
           value: '₹${data.variableCost}',
@@ -131,7 +131,7 @@ class DashboardContent extends StatelessWidget {
         const SizedBox(height: 12),
         // Profit Starting Day Stat Card (Pending data)
         StatCard(
-          image: 'assets/images/calendar.png', 
+          image: 'assets/pnl_icons/Icon4.png',
           title: 'Profit Starting Day',
           subtitle: 'Estimated break-even date',
           value: 'PREDICTING...',
@@ -141,7 +141,7 @@ class DashboardContent extends StatelessWidget {
         const SizedBox(height: 12),
         // Total Distance Driven Stat Card
         StatCard(
-          image: 'assets/images/distance.png', 
+          image: 'assets/pnl_icons/Icon5.png',
           title: 'Total Distance Driven',
           subtitle: 'Distance driven by 34 vehicles',
           value: '${data.totalDistance} km',
@@ -163,15 +163,15 @@ class DashboardContent extends StatelessWidget {
   }
 }
 
-// Stateless widget to display individual stats
 class StatCard extends StatelessWidget {
-  final String image; // Image URL for the stat card
+  final String image;
   final String title;
   final String subtitle;
   final String value;
   final bool isValuePending;
   final Color valueColor;
   final String? rightSubtext;
+  final double iconSize;
 
   const StatCard({
     super.key,
@@ -182,12 +182,16 @@ class StatCard extends StatelessWidget {
     this.isValuePending = false,
     this.valueColor = Colors.black,
     this.rightSubtext,
+    this.iconSize = 40, // Default size that can be overridden
   });
 
   @override
   Widget build(BuildContext context) {
+    // Calculate container size based on icon size
+    final containerSize = iconSize * 1.0;
+
     return Container(
-      height: 74,
+      // height: containerSize + 40, // Dynamic height based on icon size
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -204,28 +208,33 @@ class StatCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Image container with circular background
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(
-                0.15,
-              ), // Color for the image container
-              shape: BoxShape.circle,
-            ),
-            child: Image.asset(
-              image,
-              width: 24,
-              height: 24,
-              color: Colors.black,
+          // Icon container
+          SizedBox(
+            width: containerSize,
+            height: containerSize,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                // ignore: deprecated_member_use
+                color: Colors.blue.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Image.asset(
+                  image,
+                  width: iconSize,
+                  height: iconSize,
+                  fit: BoxFit.contain,
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 16),
+          // Text content
           Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title of the stat card
                 Text(
                   title,
                   style: const TextStyle(
@@ -235,7 +244,6 @@ class StatCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                // Subtitle of the stat card
                 Text(
                   subtitle,
                   style: TextStyle(fontSize: 12, color: Colors.grey[700]),
@@ -243,10 +251,11 @@ class StatCard extends StatelessWidget {
               ],
             ),
           ),
+          // Value display
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // Value of the stat card (could be pending)
               Text(
                 value,
                 style: TextStyle(
@@ -255,7 +264,6 @@ class StatCard extends StatelessWidget {
                   color: isValuePending ? valueColor : Colors.black,
                 ),
               ),
-              // Right subtext if provided (e.g., "Predicted" or "Approx")
               if (rightSubtext != null)
                 Text(
                   rightSubtext!,

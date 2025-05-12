@@ -24,20 +24,22 @@ class AppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: (isLoading || isDisabled) ? null : onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor ?? AppColors.primary,
-        foregroundColor: textColor ?? Colors.white,
+        backgroundColor:
+            backgroundColor ?? const Color.fromARGB(255, 213, 219, 230),
+        foregroundColor: textColor ?? const Color.fromARGB(255, 142, 141, 141),
         disabledBackgroundColor: AppColors.disabled,
       ),
-      child: isLoading
-          ? const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 2,
-              ),
-            )
-          : Text(text),
+      child:
+          isLoading
+              ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+              : Text(text),
     );
   }
 }

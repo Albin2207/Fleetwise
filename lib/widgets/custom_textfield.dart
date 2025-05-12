@@ -2,7 +2,6 @@ import 'package:fleetwise_app/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 class AppTextField extends StatelessWidget {
   final String? label;
   final String? hint;
@@ -17,7 +16,7 @@ class AppTextField extends StatelessWidget {
   final bool readOnly;
   final int? maxLines;
   final VoidCallback? onTap;
-  
+
   const AppTextField({
     super.key,
     this.label,
@@ -34,7 +33,7 @@ class AppTextField extends StatelessWidget {
     this.maxLines = 1,
     this.onTap,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -71,4 +70,4 @@ class AppTextField extends StatelessWidget {
       ],
     );
   }
-  }
+}

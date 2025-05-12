@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:fleetwise_app/provider/auth_provider.dart';
+import 'package:fleetwise_app/screens/auth_screens/identityproof_screen/widgets/docs_upload.dart';
+import 'package:fleetwise_app/screens/auth_screens/identityproof_screen/widgets/submit_button.dart';
 import 'package:fleetwise_app/screens/dashboard/home_screen/dashboardscreen.dart';
 import 'package:fleetwise_app/utils/color.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +134,7 @@ class _IdentityProofScreenState extends State<IdentityProofScreen> {
               const SizedBox(height: 24),
 
               // PAN Card Upload Section
-              _buildUploadSection(
+              DocumentUploadSection(
                 title: 'PAN Card*',
                 image: _panCardImage,
                 onTap: () => _showPickOptions('pan'),
@@ -141,7 +143,7 @@ class _IdentityProofScreenState extends State<IdentityProofScreen> {
               const SizedBox(height: 16),
 
               // Aadhaar Card Front Upload Section
-              _buildUploadSection(
+              DocumentUploadSection(
                 title: 'Aadhaar Card Front*',
                 image: _aadhaarFrontImage,
                 onTap: () => _showPickOptions('aadhaar_front'),
@@ -150,7 +152,7 @@ class _IdentityProofScreenState extends State<IdentityProofScreen> {
               const SizedBox(height: 16),
 
               // Aadhaar Card Back Upload Section
-              _buildUploadSection(
+              DocumentUploadSection(
                 title: 'Aadhaar Card Back*',
                 image: _aadhaarBackImage,
                 onTap: () => _showPickOptions('aadhaar_back'),
@@ -159,140 +161,42 @@ class _IdentityProofScreenState extends State<IdentityProofScreen> {
               const Spacer(),
 
               // Custom Submit Button
-              _buildCustomSubmitButton(authProvider),
+              CustomSubmitButton(
+                onTap: () async {
+                  if (_panCardImage != null &&
+                      _aadhaarFrontImage != null &&
+                      _aadhaarBackImage != null) {
+                    // Upload documents
+                    final success = await authProvider.uploadDocuments(
+                      panCard: _panCardImage!.path,
+                      aadharFront: _aadhaarFrontImage!.path,
+                      aadharBack: _aadhaarBackImage!.path,
+                      context: context,
+                    );
 
-              // Remove bottom progress bar
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUploadSection({
-    required String title,
-    required File? image,
-    required VoidCallback onTap,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Color(0xFF5A6C8A),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 2,
-                offset: const Offset(0, 1),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              // Left part - status indicator
-              Expanded(
-                child: Container(
-                  height: 56,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    image != null
-                        ? 'Document uploaded'
-                        : 'Tap to select document',
-                    style: TextStyle(
-                      color: image != null ? Colors.green : Colors.grey[600],
-                    ),
-                  ),
-                ),
-              ),
-              // Upload button part
-              GestureDetector(
-                onTap: onTap,
-                child: Container(
-                  height: 56,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.horizontal(
-                      right: Radius.circular(8),
-                    ),
-                    border: Border.all(color: Colors.grey[200]!, width: 1),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Upload',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                    if (success && mounted) {
+                      Navigator.pushReplacement(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const DashboardScreen(),
+                        ),
+                      );
+                    }
+                  } else {
+                    // Show error message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please upload all required documents'),
+                      ),
+                    );
+                  }
+                },
+                isLoading: authProvider.status == AuthStatus.loading,
               ),
             ],
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildCustomSubmitButton(AuthProvider authProvider) {
-    return InkWell(
-      onTap: () async {
-        if (_panCardImage != null &&
-            _aadhaarFrontImage != null &&
-            _aadhaarBackImage != null) {
-          // Upload documents
-          final success = await authProvider.uploadDocuments(
-            panCard: _panCardImage!.path,
-            aadharFront: _aadhaarFrontImage!.path,
-            aadharBack: _aadhaarBackImage!.path,
-          );
-
-          if (success && mounted) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const DashboardScreen()),
-            );
-          }
-        } else {
-          // Show error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Please upload all required documents'),
-            ),
-          );
-        }
-      },
-      child: Container(
-        width: double.infinity,
-        height: 56,
-        decoration: BoxDecoration(
-          color: const Color(0xFF1F3351), // Dark blue color from your image
-          borderRadius: BorderRadius.circular(8),
-        ),
-        alignment: Alignment.center,
-        child:
-            authProvider.status == AuthStatus.loading
-                ? const CircularProgressIndicator(color: Colors.white)
-                : const Text(
-                  'SUBMIT',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
       ),
     );
   }

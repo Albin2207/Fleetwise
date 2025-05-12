@@ -60,7 +60,7 @@ class TabSelector extends StatelessWidget {
           label,
           style: TextStyle(
             color: isSelected ? Colors.black : Colors.white,
-            
+
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),

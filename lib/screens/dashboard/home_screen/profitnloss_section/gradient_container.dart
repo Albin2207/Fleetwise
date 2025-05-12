@@ -38,10 +38,7 @@ class DashboardGradientContainer extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
-          end: Alignment(
-            0,
-            -0.8,
-          ), 
+          end: Alignment(0, -0.8),
           colors: [topColor, Colors.black],
           stops: const [0, 1],
         ),
